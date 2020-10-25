@@ -1,8 +1,8 @@
 // alert
 var cekKoneksi = false;
-var temporary  = {};
-const baseurl  = 'http://iseplutpi.eu5.org/aplikasi/cpb/index.php';
-function smartAlert(icon, title){
+var temporary = {};
+const baseurl = 'http://iseplutpi.eu5.org/aplikasi/cpb/server.php';
+function smartAlert(icon, title) {
 	const Toast = Swal.mixin({
 		toast: true,
 		position: 'top-end',
@@ -15,31 +15,31 @@ function smartAlert(icon, title){
 	});
 }
 
-function layerSwitch(data = false){
-	if (data){
+function layerSwitch(data = false) {
+	if (data) {
 		$('#detali-data-lengkap').removeAttr('style');
 		$('#main-content').attr('style', 'display: none');
-	}else {
+	} else {
 		$('#main-content').removeAttr('style');
 		$('#detali-data-lengkap').attr('style', 'display: none');
 	}
 }
 
-function mainRender(data){
+function mainRender(data) {
 	$('#main-content').html(data);
 }
 
-function mainLoading(data = null){
+function mainLoading(data = null) {
 	if (data == null) $('#main-content').html('<h3 class="text-center mt-5" id="loading-text">Loading...</h3>');
 	else $('#main-content').html(`<h3 class="text-center mt-5" id="loading-text">${data}</h3>`);
 }
 
-function mainLoadingLayer2(data = null){
+function mainLoadingLayer2(data = null) {
 	if (data == null) $('#detali-data-lengkap').html('<h3 class="text-center mt-5" id="loading-text">Loading...</h3>');
 	else $('#detali-data-lengkap').html(`<h3 class="text-center mt-5" id="loading-text">${data}</h3>`);
 }
 
-function dataReview(data){
+function dataReview(data) {
 	return `
 		<div class="row">
 			<div class="col-12 col-sm-6 col-md-3 zoom-hover">
@@ -98,12 +98,12 @@ function dataReview(data){
 	`;
 }
 
-function base_url(data = false){
+function base_url(data = false) {
 	if (data) return baseurl + data;
-	else  return baseurl;
+	else return baseurl;
 }
 
-function detailData(data){
+function detailData(data) {
 	const details = JSON.parse(data.dataset.detail);
 	const modalBodyDetail = $('#modal-body-detail');
 	const tableHead = `
@@ -158,17 +158,17 @@ function detailData(data){
 
 	let tableBody = ``;
 
-	details.forEach( (detail, index) => {
+	details.forEach((detail, index) => {
 		tableBody += `
 			<tr>
-				<td>${index+1}</td>
+				<td>${index + 1}</td>
 				<td>${detail.nama_jenis}</td>
 				<td>${detail.nama_bahasa}</td>
 				<td>${detail.nama_tingkat}</td>
 				<td>${detail.nama}</td>
 				<td class="text-right">${detail.total}</td>
 				<td class="text-right">${detail.selesai}</td>
-				<td class="text-right">${Math.floor((100/detail.total)*detail.selesai)}%</td>
+				<td class="text-right">${Math.floor((100 / detail.total) * detail.selesai)}%</td>
 				<td class="text-right"><button data-dismiss="modal" onclick="detailDataLayer(${detail.id_data})" class="btn btn-info btn-xs zoom-hover btn-detail" >Detail</button></td>
 			</tr>
 		`;
@@ -177,7 +177,7 @@ function detailData(data){
 	return dataReview(JSON.parse(data.dataset.review)) + tableHead + tableBody + tableFoot;
 }
 
-function detailDataLayer(idxyz){
+function detailDataLayer(idxyz) {
 	cekKoneksi = false;
 	mainLoadingLayer2();
 	layerSwitch(true);
@@ -221,10 +221,10 @@ function detailDataLayer(idxyz){
 			</div>
 			<!-- /.modal-dialog -->
 		</div>`;
-	const formOption = (data, index)=>{
+	const formOption = (data, index) => {
 		const jenis = (data) => {
 			let result = '';
-			for (let i = 0; i < data.length; i++){
+			for (let i = 0; i < data.length; i++) {
 				if (data[i].id == index.id_jenis) result += `<option selected="" value="${data[i].id}">${data[i].nama_jenis}</option>`;
 				else result += `<option value="${data[i].id}">${data[i].nama_jenis}</option>`;
 			}
@@ -232,7 +232,7 @@ function detailDataLayer(idxyz){
 		}
 		const bahasa = (data) => {
 			let result = '';
-			for (let i = 0; i < data.length; i++){
+			for (let i = 0; i < data.length; i++) {
 				if (data[i].id == index.id_bahasa) result += `<option selected="" value="${data[i].id}">${data[i].nama_bahasa}</option>`;
 				else result += `<option value="${data[i].id}">${data[i].nama_bahasa}</option>`;
 			}
@@ -240,7 +240,7 @@ function detailDataLayer(idxyz){
 		}
 		const tingkat = (data) => {
 			let result = '';
-			for (let i = 0; i < data.length; i++){
+			for (let i = 0; i < data.length; i++) {
 				if (data[i].id == index.id_tingkat) result += `<option selected="" value="${data[i].id}">${data[i].nama_tingkat}</option>`;
 				else result += `<option value="${data[i].id}">${data[i].nama_tingkat}</option>`;
 			}
@@ -410,17 +410,18 @@ function detailDataLayer(idxyz){
 			dataType: 'json',
 			data: {
 				'get': 'data',
-				'id': idxyz},
+				'id': idxyz
+			},
 			success: result => {
 				if (result.response) render(result);
 				else mainLoadingLayer2('Koneksi bermasalah');
 			}
 		});
 	}
-	const coba = ()=>{
+	const coba = () => {
 		if (!cekKoneksi) {
 			getData();
-			setTimeout(()=>{
+			setTimeout(() => {
 				if (!cekKoneksi) {
 					mainLoadingLayer2('Masalah koneksi... Mencoba menghubungkan kembali');
 					setTimeout(coba, 3000);
